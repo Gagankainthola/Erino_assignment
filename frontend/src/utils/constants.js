@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'http://localhost:5000/api';
+export const API_BASE_URL = 'https://erino-assignment-2evy.onrender.com/api';
 
 export const LEAD_STATUS_OPTIONS = [
   { value: 'new', label: 'New' },

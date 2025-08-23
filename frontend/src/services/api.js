@@ -7,10 +7,10 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // IMPORTANT: This sends cookies with requests
+  withCredentials: true, 
 });
 
-// Request interceptor (no need to add Authorization header for httpOnly cookies)
+
 api.interceptors.request.use(
   (config) => {
     console.log('Making request to:', config.baseURL + config.url);
@@ -64,11 +64,11 @@ export const authAPI = {
   register: (userData) => api.post('/auth/register', userData),
   logout: async () => {
     try {
-      await api.post('/auth/logout'); // Call backend logout to clear cookie
+      await api.post('/auth/logout'); 
       authService.logout();
     } catch (error) {
       console.error('Logout error:', error);
-      authService.logout(); // Force logout even if API call fails
+      authService.logout(); 
     }
   }
 };
