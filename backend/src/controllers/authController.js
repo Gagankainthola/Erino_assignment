@@ -6,12 +6,19 @@ const registerUser = async (req, res) => {
 
   try {
     const userExists = await User.findOne({ email });
-    if (userExists) return res.status(400).json({ message: "User already exists" });
+    if (userExists) {
+      return res.status(400).json({ message: "User already exists" });
+    }
 
     const user = await User.create({ username, email, password });
-    generateToken(res, user._id);
+    const token = generateToken(user._id);
 
-    res.status(201).json({ id: user._id, username: user.username, email: user.email });
+    res.status(201).json({
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      token, 
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -23,8 +30,13 @@ const loginUser = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (user && (await user.matchPassword(password))) {
-      generateToken(res, user._id);
-      res.json({ id: user._id, username: user.username, email: user.email });
+      const token = generateToken(user._id);
+      res.json({
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        token,
+      });
     } else {
       res.status(401).json({ message: "Invalid credentials" });
     }
@@ -34,12 +46,16 @@ const loginUser = async (req, res) => {
 };
 
 const logoutUser = (req, res) => {
-  res.cookie("jwt", "", { httpOnly: true, expires: new Date(0) });
   res.status(200).json({ message: "Logged out" });
 };
 
+
 const getCurrentUser = async (req, res) => {
-  res.json(req.user);
+  res.json({
+    id: req.user._id,
+    username: req.user.username,
+    email: req.user.email,
+  });
 };
 
 module.exports = { registerUser, loginUser, logoutUser, getCurrentUser };
