@@ -33,16 +33,11 @@
         console.log('Login response data:', response.data);
         
         // For httpOnly cookies, successful login (200) means cookie is set automatically
-        if (response.status === 200) {
-          console.log('Login successful - httpOnly cookie should be set by browser');
-          
-          // Mark user as authenticated since login was successful
-          authService.setAuthStatus(true);
-          console.log('Auth status set to true');
-          
-          console.log('Navigating to /leads');
-          navigate('/leads');
-        } else {
+        if (response.status === 200 && response.data.token) {
+  authService.setToken(response.data.token);
+  console.log('Token saved, navigating to /leads');
+  navigate('/leads');
+} else {
           throw new Error(`Unexpected response status: ${response.status}`);
         }
         

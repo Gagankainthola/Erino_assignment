@@ -10,20 +10,19 @@ class AuthService {
     return localStorage.getItem('isAuthenticated') === 'true';
   }
 
-  // For backward compatibility (not used with httpOnly cookies)
-  getToken() {
-    return null; // Not accessible with httpOnly cookies
-  }
-
   setToken(token) {
-    // For httpOnly cookies, we just mark as authenticated
-    // The browser automatically handles the cookie
-    this.setAuthStatus(true);
-  }
+  localStorage.setItem('token', token);
+  this.setAuthStatus(true);
+}
 
-  removeToken() {
-    localStorage.removeItem('isAuthenticated');
-  }
+getToken() {
+  return localStorage.getItem('token');
+}
+
+removeToken() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('isAuthenticated');
+}
 
   isAuthenticated() {
     return this.getAuthStatus();

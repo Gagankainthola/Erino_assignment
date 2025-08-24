@@ -13,6 +13,10 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
+    const token = authService.getToken();
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
     console.log('Making request to:', config.baseURL + config.url);
     console.log('With credentials (cookies):', config.withCredentials);
     return config;
